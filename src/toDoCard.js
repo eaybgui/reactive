@@ -15,7 +15,7 @@ export const ToDoCard = (props) => {
             <h1>{props.day}</h1>
             <ol>
                 {todos
-                .filter(todo => todo.days === props.day || todo.days === "daily")
+                .filter(todo => todo.days.includes(props.day)  || todo.days.includes('daily'))
                 .map((todo) => 
                     <ToDo key={todo.id} {...todo}>{todo.content}</ToDo>
                 )}

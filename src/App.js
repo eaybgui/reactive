@@ -10,6 +10,7 @@ export default function App() {
 
     const [toDos, setToDos] = useState([])
     const [newToDo, setNewToDo] = useState("")
+    const [days, setDays] = useState([])
 
     useEffect(() => {
         getAllTodos()
@@ -22,10 +23,17 @@ export default function App() {
         setNewToDo(event.target.value)
     }
 
+    const handleDaysSelect = (event) => {
+        if(event.target.checked){
+            setDays([...days, event.target.value])
+        }else{
+            setDays(days.filter(day => day !== event.target.value))
+        }
+    }
+
     const handleSubmit = (event) => {
         event.preventDefault()
         //get selectDays value
-        let days = document.getElementById("selectDays").value
         
         const toDoToAddToState = {
             todo: newToDo,
@@ -36,27 +44,45 @@ export default function App() {
             setToDos([...toDos, newToDo])
         }).catch((error) => console.log(error))
         setNewToDo("")
+        setDays([])
     }
 
     return ( 
-        <div >
+        <div>
         --banner
         --foto de perfil
         --tarjeta per al dia
         --info
         --targetes
         --grafic 
-            <ToDoCard todos={toDos} day="monday"></ToDoCard>
-            <ToDoCard todos={toDos} day="tuesday"></ToDoCard>
+            <div style={{display: "flex", margin: "0px 0px 0px 20px"}}>            
+                <ToDoCard todos={toDos} day="monday"></ToDoCard>
+                <ToDoCard todos={toDos} day="tuesday"></ToDoCard>
+                <ToDoCard todos={toDos} day="wednesday"></ToDoCard>
+                <ToDoCard todos={toDos} day="thursday"></ToDoCard>
+                <ToDoCard todos={toDos} day="friday"></ToDoCard>
+                <ToDoCard todos={toDos} day="saturday"></ToDoCard>
+                <ToDoCard todos={toDos} day="sunday"></ToDoCard>
+            </div>
             <form onSubmit={handleSubmit}>
-            //aco en el final estaria ocult fins que li dones al boto de afegir
                 <input type="text" onChange={handleChange} value={newToDo}></input>
-                <select id="selectDays"name="days">
-                    <option value="daily">Everyday</option>
-                    <option value="monday">Mondays</option>
-                </select>
+                <input type="checkbox" value="daily" name='0' onClick={handleDaysSelect}></input>
+                <label for="0">Everyday</label>
+                <input type="checkbox" value="monday" name='1' onClick={handleDaysSelect}></input>
+                <label for="1">Mondays</label>
+                <input type="checkbox" value="tuesday" name='2' onClick={handleDaysSelect}></input>
+                <label for="2">Tuesdays</label>
+                <input type="checkbox" value="wednesday" name='3' onClick={handleDaysSelect}></input>
+                <label for="3">Wednesdays</label>
+                <input type="checkbox" value="thursday" name='4' onClick={handleDaysSelect}></input>
+                <label for="4">Thursdays</label>
+                <input type="checkbox" value="friday" name='5' onClick={handleDaysSelect}></input>
+                <label for="5">Fridays</label>
+                <input type="checkbox" value="saturday" name='6' onClick={handleDaysSelect}></input>
+                <label for="6">Saturdays</label>
+                <input type="checkbox" value="sunday" name='7' onClick={handleDaysSelect}></input>
+                <label for="7">Sundays</label>
                 <button>Create todo</button>
-
             </form>
         </div>
     )
