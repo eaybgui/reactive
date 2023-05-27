@@ -1,5 +1,5 @@
-import { useState } from "react"
 import { ToDo } from "./ToDo.js"
+import styles from './toDoCard.module.css'
 //import del component toDo que rep el todo i un boolean
 //per a saber si es especific
 
@@ -11,15 +11,17 @@ export const ToDoCard = (props) => {
     const todos = props.todos
 
     return (
-        <div>
-            <h1>{props.day}</h1>
+        <div className={styles.container}>
+            
+            <h1 className={styles.day}>{props.day}</h1>
             <ol>
                 {todos
-                .filter(todo => todo.days.includes(props.day)  || todo.days.includes('daily'))
+                .filter(todo => todo.day == props.day)
                 .map((todo) => 
-                    <ToDo key={todo.id} {...todo}>{todo.content}</ToDo>
+                    <ToDo key={todo.id} day={props.day} {...todo}></ToDo>
                 )}
             </ol>
+            
         </div>
     )
 }

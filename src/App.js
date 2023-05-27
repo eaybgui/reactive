@@ -16,6 +16,7 @@ export default function App() {
         getAllTodos()
         .then((allTodos) => {
             setToDos(allTodos)
+            console.log(toDos)
         })
     }, [])
 
@@ -29,22 +30,37 @@ export default function App() {
         }else{
             setDays(days.filter(day => day !== event.target.value))
         }
+        console.log(days)
     }
+
+    useEffect(() => {
+        if(days.includes('daily'))
+            setDays(['monday', 'tuesday','wednesday', 'thursday', 'friday', 'saturday', 'sunday'])
+    }, [days])
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        //get selectDays value
-        
-        const toDoToAddToState = {
-            todo: newToDo,
-            days: days
-        }
-        console.log(toDoToAddToState)
-        createTodo(toDoToAddToState).then(newToDo => {
-            setToDos([...toDos, newToDo])
-        }).catch((error) => console.log(error))
+        console.log(days)
+        buildToDo()
         setNewToDo("")
         setDays([])
+    }
+
+    const buildToDo = () => {
+        for(let day in days){
+            console.log(days[day])
+            let toDoToAddToState = {
+                todo: newToDo,
+                day: days[day]
+            }
+            sendCreateRequest(toDoToAddToState)
+        }
+    }
+
+    const sendCreateRequest = (todo) => {
+        createTodo(todo).then(newToDo => {
+            setToDos([...toDos, newToDo])
+        }).catch((error) => console.log(error))
     }
 
     return ( 
