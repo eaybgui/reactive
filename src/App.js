@@ -3,6 +3,8 @@ import {ToDoCard} from './toDoCard.js';
 import {useState, useEffect} from 'react';
 import { getAllTodos } from './toDo/getAllTodos.js';
 import { createTodo } from './toDo/createToDo.js';
+import { getScore } from './score/getScore.js'
+import { updateScore } from './score/updateScore.js'
 
 //components: banner, foto de perfil, tarjeta per a cada dia, tarjeta per a tasques de hui, div per a info, grafic
 //accions: afegir, editar i eliminar todos, a la tarjeta de hui i a les de cada dia, desplaçar-se entre dies, marcar tasques com a fetes
@@ -11,6 +13,7 @@ export default function App() {
     const [toDos, setToDos] = useState([])
     const [newToDo, setNewToDo] = useState("")
     const [days, setDays] = useState([])
+    const [score, setScore] = useState()
 
     useEffect(() => {
         getAllTodos()
@@ -19,6 +22,24 @@ export default function App() {
             console.log(toDos)
         })
     }, [])
+
+    useEffect(() => {
+        if(days.includes('daily'))
+            setDays(['monday', 'tuesday','wednesday', 'thursday', 'friday', 'saturday', 'sunday'])
+    }, [days])
+
+    useEffect(() => {
+        getScore()
+        .then((score) => {
+            setScore(score)
+            console.log(score)
+        })
+    })
+
+    const handleScoreChange = () => {
+        setScore(prevCounter => prevCounter + 1)
+        updateScore()
+    }
 
     const handleChange = (event) => {
         setNewToDo(event.target.value)
@@ -32,11 +53,6 @@ export default function App() {
         }
         console.log(days)
     }
-
-    useEffect(() => {
-        if(days.includes('daily'))
-            setDays(['monday', 'tuesday','wednesday', 'thursday', 'friday', 'saturday', 'sunday'])
-    }, [days])
 
     const handleSubmit = (event) => {
         event.preventDefault()
@@ -79,6 +95,10 @@ export default function App() {
                 <ToDoCard todos={toDos} day="friday"></ToDoCard>
                 <ToDoCard todos={toDos} day="saturday"></ToDoCard>
                 <ToDoCard todos={toDos} day="sunday"></ToDoCard>
+            </div>
+            <div>
+                <p>Your score is: {score}</p>
+                <button onClick={handleScoreChange}>+</button>
             </div>
             <form onSubmit={handleSubmit}>
                 <input type="text" onChange={handleChange} value={newToDo}></input>
