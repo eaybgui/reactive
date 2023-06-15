@@ -36,9 +36,13 @@ export default function App() {
         })
     })
 
-    const handleScoreChange = () => {
-        setScore(prevCounter => prevCounter + 1)
-        updateScore()
+    const handleScoreChange = (operator) => {
+        console.log(operator)
+        if(operator)
+            setScore(prevCounter => prevCounter + 1)
+        else
+            setScore(prevCounter => prevCounter - 1)
+        updateScore(operator)
     }
 
     const handleChange = (event) => {
@@ -88,13 +92,13 @@ export default function App() {
         --targetes
         --grafic 
             <div style={{display: "flex", margin: "0px 0px 0px 20px"}}>            
-                <ToDoCard todos={toDos} day="monday"></ToDoCard>
-                <ToDoCard todos={toDos} day="tuesday"></ToDoCard>
-                <ToDoCard todos={toDos} day="wednesday"></ToDoCard>
-                <ToDoCard todos={toDos} day="thursday"></ToDoCard>
-                <ToDoCard todos={toDos} day="friday"></ToDoCard>
-                <ToDoCard todos={toDos} day="saturday"></ToDoCard>
-                <ToDoCard todos={toDos} day="sunday"></ToDoCard>
+                <ToDoCard todos={toDos} onIncrement={handleScoreChange} day="monday"></ToDoCard>
+                <ToDoCard todos={toDos} onIncrement={handleScoreChange} day="tuesday"></ToDoCard>
+                <ToDoCard todos={toDos} onIncrement={handleScoreChange} day="wednesday"></ToDoCard>
+                <ToDoCard todos={toDos} onIncrement={handleScoreChange} day="thursday"></ToDoCard>
+                <ToDoCard todos={toDos} onIncrement={handleScoreChange} day="friday"></ToDoCard>
+                <ToDoCard todos={toDos} onIncrement={handleScoreChange} day="saturday"></ToDoCard>
+                <ToDoCard todos={toDos} onIncrement={handleScoreChange} day="sunday"></ToDoCard>
             </div>
             <div>
                 <p>Your score is: {score}</p>

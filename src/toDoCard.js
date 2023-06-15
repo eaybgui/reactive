@@ -18,7 +18,7 @@ export const ToDoCard = (props) => {
                 {todos
                 .filter(todo => todo.day == props.day)
                 .map((todo) => 
-                    <ToDo key={todo.id} day={props.day} {...todo}></ToDo>
+                    <ToDo key={todo.id} onIncrement = {props.onIncrement} day={props.day} {...todo}></ToDo>
                 )}
             </ol>
             
