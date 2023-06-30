@@ -1,9 +1,30 @@
-.todo {
-    font-family: 'Courier New', Courier, monospace;
-    width: 100%;
+.container {
+    display: flex;
+    text-align: left;
 }
 
-.button {
-    margin-left: 10px;
-    height: 50%;
+.container:hover {
+    background-color: #223;
+}
+
+.container:hover .trash {
+    display: block;
+}
+
+.todo {
+    font-family: 'Courier New', Courier, monospace;
+    margin-left: 20px;
+    margin-right: auto;
+}
+
+.input {
+    margin-right: 15px;
+}
+
+.trash {
+    display: none;
+    margin-left: auto;
+    margin-right: 10px;
+    height: 100%;
+    color: red;
 }

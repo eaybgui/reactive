@@ -1,11 +1,13 @@
 import {useState} from "react"
 import { updateTodo } from "./toDo/updateToDo.js"
 import styles from './toDo.module.css'
-import { updateScore } from "./score/updateScore.js"
+import { BsTrash } from "react-icons/bs";
+import { removeToDo } from './toDo/removeToDo.js'
 
 export const ToDo = (props) => {
     
-    const toDo = props
+    const toDo = props.todo
+    const onDelete = props.onDelete
     let day = props.day
     let onIncrement = props.onIncrement
     
@@ -26,16 +28,21 @@ export const ToDo = (props) => {
     const changable = () => {return day == actualDay || day == yesterday}
 
     const handleDone = () => {
-        
         updateTodo(toDo)
         onIncrement(!done)
         setDone(!done)
     }
 
+    const handleRemove = () => {
+        removeToDo(toDo.id)
+        onDelete(toDo.id)
+    }
+
     return (
-        <li style={{display: "flex"}}>
+        <li className={styles.container}>
             <p className={styles.todo}>{toDo.content}</p>
-            <button disabled={!changable()} onClick={() => handleDone()}>{done ? "Done" : "Not done"}</button>
+            <i><BsTrash onClick={() => handleRemove()} className={styles.trash}></BsTrash></i>
+            <input className={styles.input} type="checkbox" disabled={!changable()} onClick={() => handleDone()} checked={done}></input>
         </li>
     )
 }

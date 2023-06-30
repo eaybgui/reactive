@@ -1,16 +1,28 @@
 .container {
-    background-color: black;
-    border: 3px solid purple;
+    background-color: #222;
     border-radius: 10%;
     color: white;
-    margin-left: 10px;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    height: 300px;
+}
+
+.wrapper {
+    width: 100%;
+    margin: 0 10px 0 10px;
+    padding: 2px;
+    background: linear-gradient(to right, rgb(175, 40, 123), purple);
+    border-radius: 10%;
 }
 
 .day {
     display: block;
+    font-family: 'mononoki', 'Courier New', Courier, monospace;
+}
+
+ol {
+    padding: 0;
+    width: 100%;
 }
