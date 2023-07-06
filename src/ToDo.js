@@ -13,7 +13,7 @@ export const ToDo = (props) => {
     
     const[done, setDone] = useState(props.done)
     const actualDay = new Date().getDay()
-    const yesterday = actualDay - 1
+    let yesterday = actualDay - 1
 
     if(day == 'monday') day = 0
     else if(day == 'tuesday') day = 1
