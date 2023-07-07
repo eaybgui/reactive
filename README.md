@@ -5,6 +5,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 # Project explanation:
 This project is a web app which objective is helping people to keep track and encourage to complete their daily tasks.
 The opetarion is based on cards for each day of the week. In this cards you have independent tasks for each day which can be deleted or marked as done. By marking the tasks done your score will increase, in the future I will get a weekly score average and plot this score into a graphic or something like that so everyone has a visualization of their progress and success.
+This repository contains the frontend of the application, which needs the backend API running to work correctly
 
 # The API
 This project utilizes an API located in https://github.com/eaybgui/reactive-api repository.
