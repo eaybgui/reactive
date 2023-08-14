@@ -161,7 +161,7 @@ export default function App() {
           <div className={styles.today_info}>
             <div className={styles.today_todos}>
               <h1 style={{ color: 'white' }}>Today&apos;s todos</h1>
-              <ToDoCard todos={toDos} onIncrement={handleScoreChange} onDelete={handleDelete} day={actualDay}></ToDoCard>
+              <ToDoCard todos={toDos} onIncrement={handleScoreChange} onDelete={handleDelete} day={actualDay} changable={true}></ToDoCard>
             </div>
             <WeatherForecast weather={weather}></WeatherForecast>
           </div>
@@ -169,13 +169,13 @@ export default function App() {
             <h1>Weekly todos</h1>
           </div>
           <div className={styles.cards_container}>
-            <ToDoCard todos={toDos} onIncrement={handleScoreChange} onDelete={handleDelete} day="monday"></ToDoCard>
-            <ToDoCard todos={toDos} onIncrement={handleScoreChange} onDelete={handleDelete} day="tuesday"></ToDoCard>
-            <ToDoCard todos={toDos} onIncrement={handleScoreChange} onDelete={handleDelete} day="wednesday"></ToDoCard>
-            <ToDoCard todos={toDos} onIncrement={handleScoreChange} onDelete={handleDelete} day="thursday"></ToDoCard>
-            <ToDoCard todos={toDos} onIncrement={handleScoreChange} onDelete={handleDelete} day="friday"></ToDoCard>
-            <ToDoCard todos={toDos} onIncrement={handleScoreChange} onDelete={handleDelete} day="saturday"></ToDoCard>
-            <ToDoCard todos={toDos} onIncrement={handleScoreChange} onDelete={handleDelete} day="sunday"></ToDoCard>
+            <ToDoCard todos={toDos} onIncrement={handleScoreChange} onDelete={handleDelete} day="monday" changable={false}></ToDoCard>
+            <ToDoCard todos={toDos} onIncrement={handleScoreChange} onDelete={handleDelete} day="tuesday" changable={false} ></ToDoCard>
+            <ToDoCard todos={toDos} onIncrement={handleScoreChange} onDelete={handleDelete} day="wednesday" changable={false}></ToDoCard>
+            <ToDoCard todos={toDos} onIncrement={handleScoreChange} onDelete={handleDelete} day="thursday" changable={false}></ToDoCard>
+            <ToDoCard todos={toDos} onIncrement={handleScoreChange} onDelete={handleDelete} day="friday" changable={false}></ToDoCard>
+            <ToDoCard todos={toDos} onIncrement={handleScoreChange} onDelete={handleDelete} day="saturday" changable={false}></ToDoCard>
+            <ToDoCard todos={toDos} onIncrement={handleScoreChange} onDelete={handleDelete} day="sunday" changable={false}></ToDoCard>
           </div>
           <div className={styles.score}>
             <p>Your score is:</p>

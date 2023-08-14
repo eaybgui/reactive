@@ -6,8 +6,7 @@ export const WeatherForecast = ({ weather }) => {
   if(weather === undefined){
     return null
   }
-  // const place = weather.location.name
-  const place = 'Gandia'
+  const place = weather.location.name
   const temperature = weather.current.temp_c
   const icon = weather.current.condition.icon
 

@@ -5,6 +5,7 @@ export const ToDoCard = (props) => {
 
   const todos = props.todos
   const day = props.day.toUpperCase()
+  const changable = props.changable
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
@@ -15,7 +16,7 @@ export const ToDoCard = (props) => {
           {todos
             .filter(todo => todo.day === props.day)
             .map((todo) =>
-              <ToDo key={todo.id} onIncrement = {props.onIncrement} onDelete={props.onDelete} day={props.day} todo={todo}></ToDo>
+              <ToDo key={todo.id} onIncrement = {props.onIncrement} onDelete={props.onDelete} day={props.day} todo={todo} changable={changable}></ToDo>
             )}
         </ol>
       </div>
