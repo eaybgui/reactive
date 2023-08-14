@@ -8,9 +8,8 @@ import LoginForm from './components/LoginForm.js'
 import styles from './app.module.css'
 import weatherServices from './services/weather.js'
 import { WeatherForecast } from './components/Weather.js'
+import dayToString from './utils/dayToString.js'
 
-//components: banner, foto de perfil, tarjeta per a cada dia, tarjeta per a tasques de hui, div per a info, grafic
-//accions: afegir, editar i eliminar todos, a la tarjeta de hui i a les de cada dia, desplaçar-se entre dies, marcar tasques com a fetes
 export default function App() {
 
   const [toDos, setToDos] = useState([])
@@ -19,6 +18,7 @@ export default function App() {
   const [user, setUser] = useState(null)
   const [weather, setWeather] = useState()
 
+  //getting all todos from the database
   useEffect(() => {
     toDosServices.getAllTodos()
       .then((allTodos) => {
@@ -26,16 +26,9 @@ export default function App() {
           setToDos(allTodos)
         console.log(allTodos)
       })
-  }, [toDos])
+  },[])
 
-  // useEffect(() => {
-  //   scoreServices.getScore()
-  //     .then((score) => {
-  //       setScore(score)
-  //       console.log(score)
-  //     })
-  // },[])
-
+  //getting the user token from the local storage
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedReactiveUser')
     if (loggedUserJSON) {
@@ -45,6 +38,15 @@ export default function App() {
     }
   }, [])
 
+  useEffect(() => {
+    scoreServices.getScore()
+      .then((score) => {
+        setScore(score)
+        console.log(score)
+      })
+  },[])
+
+  //getting the weather from the api
   useEffect(() => {
     weatherServices.getWeather()
       .then((weatherObject) => {
@@ -62,7 +64,7 @@ export default function App() {
       if(arr1[i].id !== arr2[i].id) return false
     return true
   }
-
+  //the score change uses a boolean to determine if the score should be incremented or decremented
   const handleScoreChange = (operator) => {
     console.log(operator)
     if(operator)
@@ -74,6 +76,7 @@ export default function App() {
 
   const handleDelete = (id) => {
     setToDos(toDos.filter(todo => todo.id !== id))
+    toDosServices.removeToDo(id)
   }
 
   const handleSubmit = (event) => {
@@ -100,6 +103,7 @@ export default function App() {
   }
 
   const buildToDo = (days) => {
+    let newTodos = []
     if(newToDo !== ''){
       if(days.length > 0){
         for(let day in days){
@@ -109,6 +113,7 @@ export default function App() {
             done: false
           }
           sendCreateRequest(toDoToAddToState)
+          newTodos.push(toDoToAddToState)
         }
       }else{
         console.log('Error: No days selected')
@@ -116,12 +121,12 @@ export default function App() {
     }else{
       console.log('Error: Empty todo')
     }
+    setToDos([...toDos, ...newTodos])
   }
 
   const sendCreateRequest = (todo) => {
-    toDosServices.createTodo(todo).then(newToDo => {
-      setToDos([...toDos, newToDo])
-    }).catch((error) => console.log(error))
+    toDosServices.createTodo(todo)
+      .catch((error) => console.log(error))
   }
 
   const handleLogin = async (username, password) => {
@@ -145,31 +150,7 @@ export default function App() {
 
   let actualDay = new Date().getDay()
 
-  switch(actualDay){
-  case 0:
-    actualDay = 'monday'
-    break
-  case 1:
-    actualDay = 'tuesday'
-    break
-  case 2:
-    actualDay = 'wednesday'
-    break
-  case 3:
-    actualDay = 'thursday'
-    break
-  case 4:
-    actualDay = 'friday'
-    break
-  case 5:
-    actualDay = 'saturday'
-    break
-  case 6:
-    actualDay = 'sunday'
-    break
-  default:
-    break
-  }
+  actualDay = dayToString(actualDay)
 
   return (
     <div>
@@ -178,15 +159,14 @@ export default function App() {
         : <div>
           <div className={styles.banner}></div>
           <div className={styles.today_info}>
-            <div>
-              <h1>Today&apos;s todos</h1>
+            <div className={styles.today_todos}>
+              <h1 style={{ color: 'white' }}>Today&apos;s todos</h1>
               <ToDoCard todos={toDos} onIncrement={handleScoreChange} onDelete={handleDelete} day={actualDay}></ToDoCard>
             </div>
             <WeatherForecast weather={weather}></WeatherForecast>
           </div>
           <div className={styles.mid_info}>
             <h1>Weekly todos</h1>
-            <h2>Add weekly todo</h2>
           </div>
           <div className={styles.cards_container}>
             <ToDoCard todos={toDos} onIncrement={handleScoreChange} onDelete={handleDelete} day="monday"></ToDoCard>
@@ -197,8 +177,9 @@ export default function App() {
             <ToDoCard todos={toDos} onIncrement={handleScoreChange} onDelete={handleDelete} day="saturday"></ToDoCard>
             <ToDoCard todos={toDos} onIncrement={handleScoreChange} onDelete={handleDelete} day="sunday"></ToDoCard>
           </div>
-          <div>
-            <p>Your score is: {score}</p>
+          <div className={styles.score}>
+            <p>Your score is:</p>
+            <h1>{score}</h1>
           </div>
           <form onSubmit={handleSubmit}>
             <input type="text" onChange={({ target }) => setNewToDo(target.value)} value={newToDo}></input>

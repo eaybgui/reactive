@@ -1,15 +1,24 @@
 import axios from 'axios'
+import toDosServices from './toDos'
+import baseUrl from '../utils/config'
 
-const baseUrl = 'http://localhost:3001/api/score'
+const url = baseUrl + 'score'
 
-const getScore = () => {
-  return axios.get(baseUrl)
-    .then((response) => response.data)
+const getScore = async () => {
+  const config = {
+    headers: { Authorization: toDosServices.getToken() },
+  }
+  const response = await axios.get(url, config)
+  return response.data
 }
 
 const updateScore = (operation) => {
-  return axios.put(baseUrl, { operation })
-    .then((response) => response.data)
+  console.log(operation)
+  const config = {
+    headers: { Authorization: toDosServices.getToken() }
+  }
+  const response = axios.put(url, { operation }, config)
+  return response.data
 }
 
 export default { getScore, updateScore }
