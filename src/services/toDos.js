@@ -7,7 +7,6 @@ let token = null
 
 const setToken = newToken => {
   token = `bearer ${newToken}`
-  console.log(token)
 }
 
 const getToken = () => {
@@ -22,9 +21,12 @@ const createTodo = async (todo) => {
   return response.data
 }
 
-const getAllTodos = () => {
-  return axios.get(url)
-    .then((response) => response.data)
+const getAllTodos = async () => {
+  const config = {
+    headers: { Authorization: token },
+  }
+  const response = await axios.get(url, config)
+  return response.data
 }
 
 const removeToDo = async (id) => {

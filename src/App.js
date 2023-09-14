@@ -18,16 +18,6 @@ export default function App() {
   const [user, setUser] = useState(null)
   const [weather, setWeather] = useState()
 
-  //getting all todos from the database
-  useEffect(() => {
-    toDosServices.getAllTodos()
-      .then((allTodos) => {
-        if(!arraysAreEq(allTodos, toDos))
-          setToDos(allTodos)
-        console.log(allTodos)
-      })
-  },[])
-
   //getting the user token from the local storage
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedReactiveUser')
@@ -38,11 +28,19 @@ export default function App() {
     }
   }, [])
 
+  //getting all todos from the database
+  useEffect(() => {
+    toDosServices.getAllTodos()
+      .then((allTodos) => {
+        if(!arraysAreEq(allTodos, toDos))
+          setToDos(allTodos)
+      })
+  },[])
+
   useEffect(() => {
     scoreServices.getScore()
       .then((score) => {
         setScore(score)
-        console.log(score)
       })
   },[])
 
@@ -66,7 +64,6 @@ export default function App() {
   }
   //the score change uses a boolean to determine if the score should be incremented or decremented
   const handleScoreChange = (operator) => {
-    console.log(operator)
     if(operator)
       setScore(prevCounter => prevCounter + 1)
     else
@@ -82,7 +79,6 @@ export default function App() {
   const handleSubmit = (event) => {
     event.preventDefault()
     let days = getDays()
-    console.log(days)
     buildToDo(days)
     setNewToDo('')
   }
@@ -98,7 +94,6 @@ export default function App() {
           break
         }
     }
-    console.log(days)
     return days
   }
 
@@ -135,17 +130,31 @@ export default function App() {
       const user = await loginService.login({
         username, password,
       })
-      console.log(user)
       window.localStorage.setItem(
         'loggedReactiveUser', JSON.stringify(user)
       )
 
-      toDosServices.setToken(user.token)
+      await toDosServices.setToken(user.token)
+      const todos = await toDosServices.getAllTodos()
       setUser(user)
+      setToDos(todos)
     }catch(exception){
       console.log('Wrong credentials')
       console.log(exception)
     }
+  }
+
+  const handleNewUser = async (username, password, name) => {
+    await loginService.createUser({
+      username, password, name
+    })
+    handleLogin(username, password)
+  }
+
+  const logout = () => {
+    window.localStorage.removeItem('loggedReactiveUser')
+    setUser(null)
+    toDosServices.setToken(null)
   }
 
   let actualDay = new Date().getDay()
@@ -155,7 +164,7 @@ export default function App() {
   return (
     <div>
       {user === null
-        ? <LoginForm handleLogin={handleLogin}/>
+        ? <LoginForm handleLogin={handleLogin} handleUserCreate={handleNewUser}/>
         : <div>
           <div className={styles.banner}></div>
           <div className={styles.today_info}>
@@ -201,6 +210,7 @@ export default function App() {
             <label htmlFor="7">Sundays</label>
             <button>Create todo</button>
           </form>
+          <button onClick={() => { logout() }}>Logout</button>
         </div>
       }
     </div>

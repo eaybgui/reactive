@@ -1,0 +1,24 @@
+.body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form {
+  height: 50rem;
+  display: flex;
+  flex-direction: column;
+  margin: auto 0;
+  justify-content: center;
+  width: 30rem;
+}
+
+.container {
+  display: flex;
+  padding: 2rem;
+  flex-direction: column;
+  box-shadow: 0 0 0.5rem purple;
+  border-radius: 10px;
+  height: 20rem;
+  background-color: #16191c;
+}
