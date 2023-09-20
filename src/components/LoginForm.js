@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import styles from './login.module.css'
+import Loader from './Loader.js'
 
 const LoginForm = ({ handleLogin, handleUserCreate }) => {
 
@@ -7,61 +8,74 @@ const LoginForm = ({ handleLogin, handleUserCreate }) => {
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
   const [createUser, setCreateUser] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-  const login = (event) => {
+  const login = async (event) => {
     event.preventDefault()
-    handleLogin(username, password)
+    setLoading(true)
+    await handleLogin(username, password)
     setUsername('')
     setPassword('')
+    setLoading(false)
   }
 
-  const createNewUser = (event) => {
+  const createNewUser = async (event) => {
     event.preventDefault()
-    handleUserCreate(username, password, name)
+    setLoading(true)
+    await handleUserCreate(username, password, name)
+    console.log('retorna')
     setUsername('')
     setPassword('')
+    setLoading(false)
   }
 
   const action = createUser ? createNewUser : login
 
   return (
     <div className={styles.body}>
-      <form className={styles.form} onSubmit={action}>
-        <div className={styles.container}>
-          <div>
-            username
-            <input
-              type="text"
-              value={username}
-              name="Username"
-              onChange={({ target }) => setUsername(target.value)}
-            />
-          </div>
-          {createUser ?
+      {loading ? <Loader /> :
+
+        <form className={styles.form} onSubmit={action}>
+          <div className={styles.container}>
+            <p className={styles.title}>Login</p>
             <div>
-            name
               <input
-                type="name"
-                value={ name }
-                name="name"
-                onChange={({ target }) => setName(target.value)}
+                className={styles.input}
+                type="text"
+                placeholder='Username'
+                value={username}
+                name="Username"
+                onChange={({ target }) => setUsername(target.value)}
               />
             </div>
-            : null
-          }
-          <div>
-            password
-            <input
-              type="password"
-              value={password}
-              name="Password"
-              onChange={({ target }) => setPassword(target.value)}
-            />
+            {createUser ?
+              <div>
+                <input
+                  className={styles.input}
+                  placeholder='Name'
+                  type="name"
+                  value={ name }
+                  name="name"
+                  onChange={({ target }) => setName(target.value)}
+                />
+              </div>
+              : null
+            }
+            <div>
+              <input
+                className={styles.input}
+                placeholder='Password'
+                type="password"
+                value={password}
+                name="Password"
+                onChange={({ target }) => setPassword(target.value)}
+              />
+            </div>
+            <button className={styles.button} type="submit">{createUser ? 'Sign in' : 'Login'}</button>
+            <button className={styles.button} type='button' onClick={() => setCreateUser(!createUser)}>{createUser ? 'Go back' : 'Create user'}</button>
           </div>
-          <button type="submit">{createUser ? 'Sign in' : 'Login'}</button>
-          {!createUser ? <button onClick={() => setCreateUser(true)}>Create user</button> : null}
-        </div>
-      </form>
+        </form>
+      }
     </div>
   )
 }

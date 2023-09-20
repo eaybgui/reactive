@@ -2,13 +2,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 60rem;
 }
 
 .form {
-  height: 50rem;
+  height: 60rem;
   display: flex;
   flex-direction: column;
-  margin: auto 0;
   justify-content: center;
   width: 30rem;
 }
@@ -19,6 +19,28 @@
   flex-direction: column;
   box-shadow: 0 0 0.5rem purple;
   border-radius: 10px;
-  height: 20rem;
   background-color: #16191c;
+  text-align: center;
+}
+
+.button {
+  height: 30px;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+.input {
+  width: 100%;
+  background-color: #16191c;
+  border: 0;
+  height: 35px;
+  background-color: #1c2023;
+  color: white;
+  margin-top: 20px;
+}
+
+.title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: bold;
 }

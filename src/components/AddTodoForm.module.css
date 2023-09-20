@@ -1,0 +1,67 @@
+/* Estilo para el formulario */
+.form-group {
+  margin-bottom: 10px;
+}
+
+/* Estilo para el menú desplegable */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+#toggle {
+  display: none;
+  /* Ocultar el input de checkbox original */
+}
+
+/* Estilo para la etiqueta que activa el menú desplegable */
+label[for="toggle"] {
+  cursor: pointer;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 5px;
+}
+
+/* Estilo para el contenido del menú desplegable */
+.dropdown_content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1;
+  display: none;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+/* Estilo para mostrar el menú desplegable cuando el checkbox está marcado */
+#toggle:checked+.dropdown_content {
+  display: block;
+}
+
+/* Estilo para los elementos dentro del menú desplegable */
+.dropdown_content input[type="checkbox"] {
+  display: block;
+  margin: 5px;
+}
+
+/* Estilo para las etiquetas dentro del menú desplegable */
+.dropdown_content label {
+  display: inline-block;
+  margin-left: 5px;
+}
+
+/* Estilo para el botón */
+button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}

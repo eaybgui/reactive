@@ -9,6 +9,7 @@ import styles from './app.module.css'
 import weatherServices from './services/weather.js'
 import { WeatherForecast } from './components/Weather.js'
 import dayToString from './utils/dayToString.js'
+import Notificate from './components/Notificate.js'
 
 export default function App() {
 
@@ -17,6 +18,7 @@ export default function App() {
   const [score, setScore] = useState()
   const [user, setUser] = useState(null)
   const [weather, setWeather] = useState()
+  const [message, setMessage] = useState(null)
 
   //getting the user token from the local storage
   useEffect(() => {
@@ -30,19 +32,21 @@ export default function App() {
 
   //getting all todos from the database
   useEffect(() => {
-    toDosServices.getAllTodos()
-      .then((allTodos) => {
-        if(!arraysAreEq(allTodos, toDos))
-          setToDos(allTodos)
-      })
-  },[])
+    if(user !== null)
+      toDosServices.getAllTodos()
+        .then((allTodos) => {
+          if(!arraysAreEq(allTodos, toDos))
+            setToDos(allTodos)
+        })
+  },[user])
 
   useEffect(() => {
-    scoreServices.getScore()
-      .then((score) => {
-        setScore(score)
-      })
-  },[])
+    if(user !== null)
+      scoreServices.getScore()
+        .then((score) => {
+          setScore(score)
+        })
+  },[user])
 
   //getting the weather from the api
   useEffect(() => {
@@ -90,14 +94,14 @@ export default function App() {
         if(document.getElementById(i).value !== 'daily'){
           days.push(document.getElementById(i).value)
         }else{
-          days = ['monday', 'tuesday','wednesday', 'thursday', 'friday', 'saturday', 'sunday']
-          break
+          return ['monday', 'tuesday','wednesday', 'thursday', 'friday', 'saturday', 'sunday']
         }
     }
     return days
   }
 
-  const buildToDo = (days) => {
+  //builds each todo, stores all of them in an array and sends it to the database
+  const buildToDo = async (days) => {
     let newTodos = []
     if(newToDo !== ''){
       if(days.length > 0){
@@ -107,21 +111,27 @@ export default function App() {
             day: days[day],
             done: false
           }
-          sendCreateRequest(toDoToAddToState)
           newTodos.push(toDoToAddToState)
         }
+        newTodos = await sendCreateRequest(newTodos)
+        console.log(newTodos)
       }else{
-        console.log('Error: No days selected')
+        setMessage('You must select at least one day')
       }
     }else{
-      console.log('Error: Empty todo')
+      setMessage('You must write something')
     }
     setToDos([...toDos, ...newTodos])
   }
 
-  const sendCreateRequest = (todo) => {
-    toDosServices.createTodo(todo)
-      .catch((error) => console.log(error))
+  const sendCreateRequest = async (todo) => {
+    try{
+      const todos = await toDosServices.createTodo(todo)
+      console.log(todos)
+      return todos
+    }catch(exception){
+      console.log(exception)
+    }
   }
 
   const handleLogin = async (username, password) => {
@@ -141,14 +151,16 @@ export default function App() {
     }catch(exception){
       console.log('Wrong credentials')
       console.log(exception)
+      return false
     }
   }
 
   const handleNewUser = async (username, password, name) => {
-    await loginService.createUser({
-      username, password, name
-    })
-    handleLogin(username, password)
+
+    if(await loginService.createUser({ username, password, name }))
+      handleLogin(username, password)
+    else
+      return false
   }
 
   const logout = () => {
@@ -190,6 +202,7 @@ export default function App() {
             <p>Your score is:</p>
             <h1>{score}</h1>
           </div>
+          <Notificate message={message}></Notificate>
           <form onSubmit={handleSubmit}>
             <input type="text" onChange={({ target }) => setNewToDo(target.value)} value={newToDo}></input>
             <input id="0" type="checkbox" value="daily" ></input>

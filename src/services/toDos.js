@@ -13,11 +13,11 @@ const getToken = () => {
   return token
 }
 
-const createTodo = async (todo) => {
+const createTodo = async (todos) => {
   const config = {
     headers: { Authorization: token },
   }
-  const response = await axios.post(url, todo, config)
+  const response = await axios.post(url, todos, config)
   return response.data
 }
 

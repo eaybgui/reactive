@@ -1,7 +1,11 @@
 import styles from './weather.module.css'
 import dayToString from '../utils/dayToString'
+import { useState } from 'react'
 
 export const WeatherForecast = ({ weather }) => {
+
+  const [date, setDate] = useState()
+  const [time, setTime] = useState()
 
   if(weather === undefined){
     return null
@@ -23,8 +27,8 @@ export const WeatherForecast = ({ weather }) => {
     const time = `${hours}:${minutes}:${seconds}`
     const dateStr = `${day}, ${dayOfMonth}/${month}`
 
-    document.getElementById('date').innerHTML = dateStr
-    document.getElementById('clock').innerHTML = time
+    setDate(dateStr)
+    setTime(time)
   }
 
   setInterval(updateClock, 1000)
@@ -32,8 +36,8 @@ export const WeatherForecast = ({ weather }) => {
   return (
     <div className={styles.container}>
       <div className={styles.date_container}>
-        <div id='date' className={styles.date}></div>
-        <div id='clock' className={styles.clock}></div>
+        <div id='date' className={styles.date}>{date}</div>
+        <div id='clock' className={styles.clock}>{time}</div>
       </div>
       <div className={styles.separator}></div>
       <div className={styles.weather_info}>
