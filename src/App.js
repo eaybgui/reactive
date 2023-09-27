@@ -117,9 +117,11 @@ export default function App() {
         console.log(newTodos)
       }else{
         setMessage('You must select at least one day')
+        setTimeout(() => setMessage(null), 5000)
       }
     }else{
       setMessage('You must write something')
+      setTimeout(() => setMessage(null), 5000)
     }
     setToDos([...toDos, ...newTodos])
   }
@@ -140,16 +142,19 @@ export default function App() {
       const user = await loginService.login({
         username, password,
       })
-      window.localStorage.setItem(
-        'loggedReactiveUser', JSON.stringify(user)
-      )
+      if(user){
+        window.localStorage.setItem(
+          'loggedReactiveUser', JSON.stringify(user)
+        )
 
-      await toDosServices.setToken(user.token)
-      const todos = await toDosServices.getAllTodos()
-      setUser(user)
-      setToDos(todos)
+        await toDosServices.setToken(user.token)
+        const todos = await toDosServices.getAllTodos()
+        setUser(user)
+        setToDos(todos)
+        return true
+      }
+      return false
     }catch(exception){
-      console.log('Wrong credentials')
       console.log(exception)
       return false
     }
@@ -158,7 +163,7 @@ export default function App() {
   const handleNewUser = async (username, password, name) => {
 
     if(await loginService.createUser({ username, password, name }))
-      handleLogin(username, password)
+      return  handleLogin(username, password)
     else
       return false
   }
@@ -202,7 +207,7 @@ export default function App() {
             <p>Your score is:</p>
             <h1>{score}</h1>
           </div>
-          <Notificate message={message}></Notificate>
+          <Notificate message={message} error={true}></Notificate>
           <form onSubmit={handleSubmit}>
             <input type="text" onChange={({ target }) => setNewToDo(target.value)} value={newToDo}></input>
             <input id="0" type="checkbox" value="daily" ></input>

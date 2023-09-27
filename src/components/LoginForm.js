@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import styles from './login.module.css'
 import Loader from './Loader.js'
+import Notificate from './Notificate'
 
 const LoginForm = ({ handleLogin, handleUserCreate }) => {
 
@@ -9,11 +10,20 @@ const LoginForm = ({ handleLogin, handleUserCreate }) => {
   const [name, setName] = useState('')
   const [createUser, setCreateUser] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState(null)
 
   const login = async (event) => {
     event.preventDefault()
+    if(username === '' || password === ''){
+      setMessage('Please fill all the fields')
+      setTimeout(() => setMessage(null), 5000)
+      return
+    }
     setLoading(true)
-    await handleLogin(username, password)
+    if(!await handleLogin(username, password)){
+      setMessage('Wrong credentials')
+      setTimeout(() => setMessage(null), 5000)
+    }
     setUsername('')
     setPassword('')
     setLoading(false)
@@ -21,9 +31,16 @@ const LoginForm = ({ handleLogin, handleUserCreate }) => {
 
   const createNewUser = async (event) => {
     event.preventDefault()
+    if(username === '' || password === '' || name === ''){
+      setMessage('Please fill all the fields')
+      setTimeout(() => setMessage(null), 5000)
+      return
+    }
     setLoading(true)
-    await handleUserCreate(username, password, name)
-    console.log('retorna')
+    if(!await handleUserCreate(username, password, name)){
+      setMessage('Username already taken')
+      setTimeout(() => setMessage(null), 5000)
+    }
     setUsername('')
     setPassword('')
     setLoading(false)
@@ -34,8 +51,8 @@ const LoginForm = ({ handleLogin, handleUserCreate }) => {
   return (
     <div className={styles.body}>
       {loading ? <Loader /> :
-
         <form className={styles.form} onSubmit={action}>
+          <Notificate message={message} error={true}/>
           <div className={styles.container}>
             <p className={styles.title}>Login</p>
             <div>
