@@ -10,6 +10,7 @@ import weatherServices from './services/weather.js'
 import { WeatherForecast } from './components/Weather.js'
 import dayToString from './utils/dayToString.js'
 import Notificate from './components/Notificate.js'
+import Loader from './components/Loader.js'
 
 export default function App() {
 
@@ -19,6 +20,7 @@ export default function App() {
   const [user, setUser] = useState(null)
   const [weather, setWeather] = useState()
   const [message, setMessage] = useState(null)
+  const [loading, setLoading] = useState(false)
 
   //getting the user token from the local storage
   useEffect(() => {
@@ -80,11 +82,13 @@ export default function App() {
     toDosServices.removeToDo(id)
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
     let days = getDays()
-    buildToDo(days)
+    setLoading(true)
+    await buildToDo(days)
     setNewToDo('')
+    setLoading(false)
   }
 
   const getDays = () => {
@@ -180,7 +184,7 @@ export default function App() {
 
   return (
     <div>
-      {user === null
+      {user !== null
         ? <LoginForm handleLogin={handleLogin} handleUserCreate={handleNewUser}/>
         : <div>
           <div className={styles.banner}></div>
@@ -208,26 +212,28 @@ export default function App() {
             <h1>{score}</h1>
           </div>
           <Notificate message={message} error={true}></Notificate>
-          <form onSubmit={handleSubmit}>
-            <input type="text" onChange={({ target }) => setNewToDo(target.value)} value={newToDo}></input>
-            <input id="0" type="checkbox" value="daily" ></input>
-            <label htmlFor="0">Everyday</label>
-            <input id="1" type="checkbox" value="monday"></input>
-            <label htmlFor="1">Mondays</label>
-            <input id="2" type="checkbox" value="tuesday" ></input>
-            <label htmlFor="2">Tuesdays</label>
-            <input id="3" type="checkbox" value="wednesday"></input>
-            <label htmlFor="3">Wednesdays</label>
-            <input id="4" type="checkbox" value="thursday"></input>
-            <label htmlFor="4">Thursdays</label>
-            <input id="5" type="checkbox" value="friday" ></input>
-            <label htmlFor="5">Fridays</label>
-            <input id="6" type="checkbox" value="saturday"></input>
-            <label htmlFor="6">Saturdays</label>
-            <input id="7" type="checkbox" value="sunday"></input>
-            <label htmlFor="7">Sundays</label>
-            <button>Create todo</button>
-          </form>
+          {loading ? <Loader />
+            : <form onSubmit={handleSubmit}>
+              <input type="text" onChange={({ target }) => setNewToDo(target.value)} value={newToDo}></input>
+              <input id="0" type="checkbox" value="daily" ></input>
+              <label htmlFor="0">Everyday</label>
+              <input id="1" type="checkbox" value="monday"></input>
+              <label htmlFor="1">Mondays</label>
+              <input id="2" type="checkbox" value="tuesday" ></input>
+              <label htmlFor="2">Tuesdays</label>
+              <input id="3" type="checkbox" value="wednesday"></input>
+              <label htmlFor="3">Wednesdays</label>
+              <input id="4" type="checkbox" value="thursday"></input>
+              <label htmlFor="4">Thursdays</label>
+              <input id="5" type="checkbox" value="friday" ></input>
+              <label htmlFor="5">Fridays</label>
+              <input id="6" type="checkbox" value="saturday"></input>
+              <label htmlFor="6">Saturdays</label>
+              <input id="7" type="checkbox" value="sunday"></input>
+              <label htmlFor="7">Sundays</label>
+              <button>Create todo</button>
+            </form>
+          }
           <button onClick={() => { logout() }}>Logout</button>
         </div>
       }
